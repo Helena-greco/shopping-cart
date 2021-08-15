@@ -31,13 +31,19 @@ function createCartItemElement({ sku, name, salePrice }) {
 // Função para add o item selecionado no cart__items - Requisito 2
 function fetchProductById(event) {
   const id = event.target.parentElement.firstChild.innerText;
+  const cartList = document.querySelector('.cart__items');
   fetch(`https://api.mercadolibre.com/items/${id}`)
     .then((response) => response.json())
     .then((result) => {
-      const cartList = document.querySelector('.cart__items');
       const cartItem = { sku: result.id, name: result.title, salePrice: result.price };
       cartList.appendChild(createCartItemElement(cartItem));
     });
+    // Requisito 6.
+  const deleteButton = document.querySelector('.empty-cart');
+  deleteButton.addEventListener('click', () => {
+    const cart = document.querySelector('.cart__items');
+    cart.innerHTML = '';
+  });
 }
 
 function createProductItemElement({ sku, name, image }) {
