@@ -1,3 +1,5 @@
+const cartList = document.querySelector('.cart__items');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -17,15 +19,9 @@ function createCustomElement(element, className, innerText) {
 // }
 
 // Função para salvar itens no LocalStorage - Requisito 4.
-const productsInCart = document.querySelector('.cart__items');
 const updateLocalStorage = () => {
-  localStorage.setItem('Product', productsInCart.innerHTML);
+  localStorage.setItem('Product', cartList.innerHTML);
 };
-
-// Função para resgatar itens ao recarregar a página
-// const rescueItems = () => {
-//   productsInCart.appendChild(localStorage.getItem('Product'));
-// };
 
 function cartItemClickListener(event) {
   event.target.remove();
@@ -40,10 +36,11 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+cartList.addEventListener('click', cartItemClickListener);
+
 // Função para add o item selecionado no cart__items - Requisito 2
 function fetchProductById(event) {
   const id = event.target.parentElement.firstChild.innerText;
-  const cartList = document.querySelector('.cart__items');
   fetch(`https://api.mercadolibre.com/items/${id}`)
     .then((response) => response.json())
     .then((result) => {
@@ -51,7 +48,6 @@ function fetchProductById(event) {
       cartList.appendChild(createCartItemElement(cartItem));
     })
     .then(() => updateLocalStorage()); // Add cada item
-
     // Requisito 6.
   const deleteButton = document.querySelector('.empty-cart');
   deleteButton.addEventListener('click', () => {
@@ -92,5 +88,5 @@ function fetchProductsAPI() {
 
 window.onload = () => {
   fetchProductsAPI();
-  // rescueItems();
+  cartList.innerHTML = localStorage.getItem('Product');
  };
