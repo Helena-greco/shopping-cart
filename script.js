@@ -16,8 +16,20 @@ function createCustomElement(element, className, innerText) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+// Função para salvar itens no LocalStorage - Requisito 4.
+const productsInCart = document.querySelector('.cart__items');
+const updateLocalStorage = () => {
+  localStorage.setItem('Product', productsInCart.innerHTML);
+};
+
+// Função para resgatar itens ao recarregar a página
+// const rescueItems = () => {
+//   productsInCart.appendChild(localStorage.getItem('Product'));
+// };
+
 function cartItemClickListener(event) {
   event.target.remove();
+  updateLocalStorage(); // para remover item clicado
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -37,12 +49,14 @@ function fetchProductById(event) {
     .then((result) => {
       const cartItem = { sku: result.id, name: result.title, salePrice: result.price };
       cartList.appendChild(createCartItemElement(cartItem));
-    });
+    })
+    .then(() => updateLocalStorage()); // Add cada item
+
     // Requisito 6.
   const deleteButton = document.querySelector('.empty-cart');
   deleteButton.addEventListener('click', () => {
-    const cart = document.querySelector('.cart__items');
-    cart.innerHTML = '';
+    cartList.innerHTML = '';
+    updateLocalStorage(); // Deletar todos os itens
   });
 }
 
@@ -78,4 +92,5 @@ function fetchProductsAPI() {
 
 window.onload = () => {
   fetchProductsAPI();
+  // rescueItems();
  };
