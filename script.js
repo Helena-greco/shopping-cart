@@ -32,7 +32,6 @@ function cartItemClickListener(event) {
   const number = Number.parseFloat(splitString[1]);
   total -= number;
   const priceRound = total.toFixed(2);
-  console.log(total);
   totalPrice.innerHTML = `${priceRound}`;
   event.target.remove(); // Requisito 3
   updateLocalStorage(); // para remover item clicado
@@ -105,8 +104,6 @@ async function fetchProductsAPI() {
 
 function deleteLis() {
   total = Number.parseFloat(localStorage.getItem('Price'));
-  totalPrice.innerHTML = total;
-  console.log(typeof totalPrice.innerHTML);
   const lisCart = document.querySelectorAll('li');
   lisCart.forEach((event) => {
     event.addEventListener('click', cartItemClickListener);
